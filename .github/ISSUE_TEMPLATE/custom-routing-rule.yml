@@ -1,0 +1,46 @@
+name: Custom routing rule
+description: Add domains or IP/CIDR to custom PROXY or DIRECT rules
+title: "Custom routing: "
+labels:
+  - custom-routing-request
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this form to request custom routing rules.
+
+        Choose PROXY if traffic should go through proxy.
+        Choose DIRECT if traffic should go directly.
+
+  - type: dropdown
+    id: target
+    attributes:
+      label: Target
+      description: Where should these rules be routed?
+      options:
+        - PROXY
+        - DIRECT
+    validations:
+      required: true
+
+  - type: textarea
+    id: entries
+    attributes:
+      label: Domains or IP/CIDR
+      description: One entry per line. Do not use URLs.
+      placeholder: |
+        youtube.com
+        googlevideo.com
+        149.154.160.0/20
+    validations:
+      required: true
+
+  - type: textarea
+    id: comment
+    attributes:
+      label: Comment
+      description: Optional explanation
+      placeholder: |
+        Why is this route needed?
+    validations:
+      required: false
