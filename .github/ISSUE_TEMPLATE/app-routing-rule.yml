@@ -1,0 +1,52 @@
+name: App routing rule
+description: Route an application (by process name) through PROXY or DIRECT
+title: "App routing: "
+labels:
+  - app-routing-request
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this form to route an application by its process (not by domain).
+
+        Choose PROXY if the app should go through proxy.
+        Choose DIRECT if the app should go directly.
+
+        Works on Windows, macOS, Linux and Android (Android matches the package name).
+        Does NOT work on iOS. To route an app on iOS, request its DOMAINS via the
+        "Custom routing rule" form instead.
+
+  - type: dropdown
+    id: target
+    attributes:
+      label: Target
+      description: Where should this application be routed?
+      options:
+        - PROXY
+        - DIRECT
+    validations:
+      required: true
+
+  - type: textarea
+    id: entries
+    attributes:
+      label: Applications
+      description: One process name / package / path per line. Do not add a comma or Clash syntax.
+      placeholder: |
+        steam.exe
+        Telegram
+        org.telegram.messenger
+        path:/Applications/Foo.app/Contents/MacOS/Foo
+        regex:^chrom(e|ium)
+    validations:
+      required: true
+
+  - type: textarea
+    id: comment
+    attributes:
+      label: Comment
+      description: Optional explanation
+      placeholder: |
+        Why is this route needed?
+    validations:
+      required: false
