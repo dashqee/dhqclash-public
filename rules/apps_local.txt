@@ -22,8 +22,3 @@
 #
 # Empty lines and comments are allowed.
 
-# From issue #4
-Discord.exe
-
-# From issue #6
-AnyDesk.exe
