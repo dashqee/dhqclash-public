@@ -1,0 +1,107 @@
+# Custom routing list.
+#
+# One entry per line.
+#
+# Allowed:
+#   example.com
+#   +.example.com
+#   *.example.com
+#   1.1.1.1
+#   8.8.8.8/32
+#   149.154.160.0/20
+#
+# Not allowed:
+#   https://example.com/path
+#   DOMAIN-SUFFIX,example.com
+#   IP-CIDR,1.1.1.1/32
+#
+# Empty lines and comments are allowed.
+
+
+8.8.8.8/32
+
+# From issue #10
++.7tv.app
++.7tv.net
++.anistar.org
++.ficbook.net
++.genyoutube.online
++.hdrezka.tv
++.jut.su
++.myanimelist.net
++.rezka.ag
++.songsterr.com
++.v1.yaoilib.net
+
+
+# From issue #26
++.2ip.ru
++.aistudio.google.com
++.alkalimining-pa.googleapis.com
++.anthropic.com
++.arcanefiles.net
++.arcaneworld.net
++.archiveofourown.org
++.arturia.net
++.base64.guru
++.bitchesgirls.tv
++.blmodding.wikidot.com
++.chatgpt.com
++.clash.gg
++.claude.ai
++.claude.com
++.claudeusercontent.com
++.csrep.gg
++.csst.at
++.devtoolcafe.com
++.fbcdn.net
++.gemini.google.com
++.generativelanguage.googleapis.com
++.getanalyst.ru
++.kahoot.it
++.leetify.com
++.lolalytics.com
++.lolvvv.com
++.lumosity.com
++.metasrc.com
++.mobalytics.gg
++.mw2.global
++.mw5.fun
++.oculus.com
++.onlyfans.com
++.pay.openai.com
++.poe2db.tw
++.pornolab.net
++.porofessor.gg
++.pricempire.com
++.proactivebackend-pa.googleapis.com
++.pros.gg
++.pros.lol
++.reactor.cc
++.rucriminal.info
++.rutracker.org
++.skinsearch.com
++.swagger.io
++.utweb.rainberrytv.com
++.viralxxxporn.com
++.whatismyip.com
++.whatismyipaddress.com
+
+# From issue #28
++.chessbase.com
+
+# From issue #33
+104.21.32.39/32
+
+# From issue #39
++.liquipedia.net
+
+103.4.114.233/32
+182.162.116.1/32
+185.60.112.157/32
+185.60.112.158/32
+202.9.67.59/32
+203.69.111.4/32
+24.105.30.129/32
+24.105.62.129/32
+54.207.104.145/32

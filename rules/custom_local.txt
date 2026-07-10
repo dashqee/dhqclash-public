@@ -1,0 +1,27 @@
+# Custom routing list.
+#
+# One entry per line.
+#
+# Allowed:
+#   example.com
+#   +.example.com
+#   *.example.com
+#   1.1.1.1
+#   8.8.8.8/32
+#   149.154.160.0/20
+#
+# Not allowed:
+#   https://example.com/path
+#   DOMAIN-SUFFIX,example.com
+#   IP-CIDR,1.1.1.1/32
+#
+# Empty lines and comments are allowed.
+
+# From issue #7
++.cybershoke.net
++.faceit.com
+
+
+# From issue #30
+avito
+ozon

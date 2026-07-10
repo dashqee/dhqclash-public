@@ -1,0 +1,52 @@
+name: App routing request to PR
+
+on:
+  issues:
+    types:
+      - labeled
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
+jobs:
+  create-app-routing-pr:
+    if: github.event.label.name == 'approved-app-request'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Parse issue form and update app rules
+        run: |
+          set -euo pipefail
+
+          ISSUE_NUMBER="${{ github.event.issue.number }}"
+
+          python3 scripts/apply_app_routing_issue.py \
+            --issue-body "$GITHUB_EVENT_PATH" \
+            --issue-number "$ISSUE_NUMBER"
+
+      - name: Create pull request
+        uses: peter-evans/create-pull-request@v6
+        with:
+          commit-message: "add app routing rules from issue #${{ github.event.issue.number }}"
+          title: "App routing rules from issue #${{ github.event.issue.number }}"
+          body: |
+            Generated from issue #${{ github.event.issue.number }}.
+
+            Please review the changes before merge.
+          branch: bot/app-routing-issue-${{ github.event.issue.number }}
+          delete-branch: true
+          add-paths: |
+            rules/apps_proxy.txt
+            rules/apps_local.txt
+
+      - name: Comment on issue
+        run: |
+          gh issue comment "${{ github.event.issue.number }}" \
+            --body "Created a pull request with requested app routing changes."
+        env:
+          GH_TOKEN: ${{ github.token }}
