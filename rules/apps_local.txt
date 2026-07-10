@@ -24,3 +24,6 @@
 
 # From issue #4
 Discord.exe
+
+# From issue #6
+AnyDesk.exe
