@@ -1,0 +1,107 @@
+name: Check rules-only PR
+
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
+
+# Без явного блока прав GITHUB_TOKEN при ограниченных дефолтах репозитория
+# не имеет scope на issues/pull-requests, и живое чтение лейблов
+# (gh api .../issues/<n>/labels) падает с HTTP 403. Выдаём чтение явно.
+permissions:
+  contents: read
+  issues: read
+  pull-requests: read
+
+jobs:
+  check-rules-only:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check for setup PR label
+        id: setup
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          # Лейбл setup-pr вешается сразу ПОСЛЕ создания PR, поэтому в снапшоте
+          # события opened его ещё нет. Читаем лейблы живым API-запросом с
+          # паузой — к моменту выполнения лейбл уже на месте. Благодаря этому
+          # у setup-PR проходит первый же запуск, а поздно навешенный лейбл
+          # лечится кнопкой Re-run вместо нового события.
+          sleep 15
+
+          LABELS=$(gh api "repos/${{ github.repository }}/issues/${{ github.event.pull_request.number }}/labels" --jq '[.[].name] | tojson')
+          echo "PR labels: $LABELS"
+
+          if echo "$LABELS" | grep -q '"setup-pr"'; then
+            echo "is_setup=true" >> "$GITHUB_OUTPUT"
+            echo "This is setup PR, rules-only guard is skipped."
+          else
+            echo "is_setup=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Checkout
+        if: steps.setup.outputs.is_setup != 'true'
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check changed files
+        if: steps.setup.outputs.is_setup != 'true'
+        run: |
+          set -euo pipefail
+
+          BASE_REF="${{ github.base_ref }}"
+
+          git fetch origin "$BASE_REF" --depth=1
+
+          CHANGED_FILES="$(git diff --name-only "origin/$BASE_REF"...HEAD)"
+
+          echo "Changed files:"
+          echo "$CHANGED_FILES"
+
+          if [ -z "$CHANGED_FILES" ]; then
+            echo "No changed files"
+            exit 0
+          fi
+
+          BAD_FILES="$(echo "$CHANGED_FILES" | grep -vE '^rules/(custom_proxy|custom_local|apps_proxy|apps_local)\.txt$' || true)"
+
+          if [ -n "$BAD_FILES" ]; then
+            echo "PR changes files outside allowed custom rules files:"
+            echo "$BAD_FILES"
+            echo ""
+            echo "Allowed files for user PR:"
+            echo " - rules/custom_proxy.txt"
+            echo " - rules/custom_local.txt"
+            echo " - rules/apps_proxy.txt"
+            echo " - rules/apps_local.txt"
+            echo ""
+            echo "If this is an infrastructure/setup PR, maintainer must add label: setup-pr"
+            exit 1
+          fi
+
+          echo "OK: PR changes only custom rules files"
+
+      - name: Validate custom rules syntax
+        if: steps.setup.outputs.is_setup != 'true'
+        run: |
+          python3 scripts/build_custom_rule_sources.py \
+            --proxy-input rules/custom_proxy.txt \
+            --local-input rules/custom_local.txt \
+            --out-dir build
+
+      - name: Validate app rules syntax
+        if: steps.setup.outputs.is_setup != 'true'
+        run: |
+          python3 scripts/build_app_rule_sources.py \
+            --proxy-input rules/apps_proxy.txt \
+            --local-input rules/apps_local.txt \
+            --out-dir build
+
+      - name: Setup PR accepted
+        if: steps.setup.outputs.is_setup == 'true'
+        run: |
+          echo "Setup PR label is present. Skipping rules-only restrictions."

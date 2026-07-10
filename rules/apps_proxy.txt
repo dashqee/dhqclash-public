@@ -1,0 +1,25 @@
+# Custom application routing list (route through PROXY).
+#
+# One process entry per line. Matches by the ORIGINATING PROCESS,
+# not by domain/IP.
+#
+# Works on: Windows, macOS, Linux, Android (Android matches the package name).
+# Does NOT work on: iOS (the packet tunnel can't see the app),
+#                    the router config (find-process-mode: off).
+# To route an app on iOS, add its DOMAINS via rules/custom_proxy.txt instead.
+#
+# Allowed:
+#   steam.exe                 -> PROCESS-NAME,steam.exe
+#   Telegram                  -> PROCESS-NAME,Telegram
+#   org.telegram.messenger    -> PROCESS-NAME,org.telegram.messenger  (Android package)
+#   path:/Applications/Foo.app/Contents/MacOS/Foo -> PROCESS-PATH,...
+#   regex:^chrom(e|ium)       -> PROCESS-NAME-REGEX,^chrom(e|ium)
+#
+# Not allowed:
+#   any entry containing a comma
+#   full Clash rule lines (PROCESS-NAME,steam.exe)
+#   URLs
+#
+# Empty lines and comments are allowed.
+HeroesOfTheStorm_x64
+battle.net

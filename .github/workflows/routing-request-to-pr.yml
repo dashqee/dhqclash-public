@@ -1,0 +1,53 @@
+name: Routing request to PR
+
+on:
+  issues:
+    types:
+      - labeled
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
+jobs:
+  create-routing-pr:
+    if: github.event.label.name == 'approved-routing-request'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Parse issue form and update rules
+        run: |
+          set -euo pipefail
+
+          ISSUE_NUMBER="${{ github.event.issue.number }}"
+          ISSUE_TITLE="${{ github.event.issue.title }}"
+
+          python3 scripts/apply_routing_issue.py \
+            --issue-body "$GITHUB_EVENT_PATH" \
+            --issue-number "$ISSUE_NUMBER"
+
+      - name: Create pull request
+        uses: peter-evans/create-pull-request@v6
+        with:
+          commit-message: "add custom routing rules from issue #${{ github.event.issue.number }}"
+          title: "Custom routing rules from issue #${{ github.event.issue.number }}"
+          body: |
+            Generated from issue #${{ github.event.issue.number }}.
+
+            Please review the changes before merge.
+          branch: bot/custom-routing-issue-${{ github.event.issue.number }}
+          delete-branch: true
+          add-paths: |
+            rules/custom_proxy.txt
+            rules/custom_local.txt
+
+      - name: Comment on issue
+        run: |
+          gh issue comment "${{ github.event.issue.number }}" \
+            --body "Created a pull request with requested custom routing changes."
+        env:
+          GH_TOKEN: ${{ github.token }}

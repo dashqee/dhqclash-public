@@ -1,0 +1,121 @@
+name: Build custom Mihomo MRS
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "rules/custom_proxy.txt"
+      - "rules/custom_local.txt"
+      - "rules/apps_proxy.txt"
+      - "rules/apps_local.txt"
+      - "scripts/build_custom_rule_sources.py"
+      - "scripts/build_app_rule_sources.py"
+      - ".github/workflows/build-custom-mrs.yml"
+
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Generate text rulesets
+        run: |
+          python3 scripts/build_custom_rule_sources.py \
+            --proxy-input rules/custom_proxy.txt \
+            --local-input rules/custom_local.txt \
+            --out-dir build
+
+      - name: Download mihomo
+        run: |
+          set -euo pipefail
+
+          ASSET="$(gh release view \
+            --repo MetaCubeX/mihomo \
+            --json assets \
+            --jq '[.assets[]
+              | select(.name | test("^mihomo-linux-amd64-v[0-9].*\\.gz$"))
+              | select(.name | contains("compatible") | not)
+              | select(.name | contains("go120") | not)
+              | .name][0]')"
+
+          echo "Selected asset: $ASSET"
+
+          if [ -z "$ASSET" ] || [ "$ASSET" = "null" ]; then
+            echo "No suitable mihomo linux amd64 asset found"
+            exit 1
+          fi
+
+          gh release download \
+            --repo MetaCubeX/mihomo \
+            --pattern "$ASSET" \
+            --output mihomo.gz
+
+          gzip -d mihomo.gz
+          chmod +x mihomo
+
+          ./mihomo -v
+        env:
+          GH_TOKEN: ${{ github.token }}
+
+      - name: Convert to MRS
+        run: |
+          set -euo pipefail
+
+          mkdir -p generated
+
+          ./mihomo convert-ruleset domain text \
+            build/custom-proxy-domains.txt \
+            generated/custom-proxy-domains.mrs
+
+          ./mihomo convert-ruleset ipcidr text \
+            build/custom-proxy-ipcidr.txt \
+            generated/custom-proxy-ipcidr.mrs
+
+          ./mihomo convert-ruleset domain text \
+            build/custom-local-domains.txt \
+            generated/custom-local-domains.mrs
+
+          ./mihomo convert-ruleset ipcidr text \
+            build/custom-local-ipcidr.txt \
+            generated/custom-local-ipcidr.mrs
+
+          ls -lh generated
+
+      # Правила по процессам — classical/text, mihomo convert-ruleset их не берёт
+      # (.mrs только domain/ipcidr), поэтому просто генерим .list напрямую.
+      - name: Build app process rulesets
+        run: |
+          set -euo pipefail
+
+          python3 scripts/build_app_rule_sources.py \
+            --proxy-input rules/apps_proxy.txt \
+            --local-input rules/apps_local.txt \
+            --out-dir generated
+
+          ls -lh generated
+
+      # Публикуем в release ЭТОГО (публичного) репо — оттуда .mrs тянут все клиенты.
+      # Репо и релиз совпадают со сборкой, поэтому хватает встроенного GITHUB_TOKEN
+      # (permissions: contents: write выше). Тег/релиз custom-mrs уже существуют.
+      - name: Publish generated MRS to the release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          gh release upload custom-mrs \
+            --repo ${{ github.repository }} \
+            --clobber \
+            generated/custom-proxy-domains.mrs \
+            generated/custom-proxy-ipcidr.mrs \
+            generated/custom-local-domains.mrs \
+            generated/custom-local-ipcidr.mrs \
+            generated/custom-apps-proxy.list \
+            generated/custom-apps-local.list
