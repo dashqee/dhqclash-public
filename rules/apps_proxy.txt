@@ -22,4 +22,5 @@
 #
 # Empty lines and comments are allowed.
 HeroesOfTheStorm_x64
-battle.net
+HeroesOfTheStorm_x64.exe
+battle.net.exe
