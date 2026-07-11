@@ -30,7 +30,7 @@ jobs:
           # паузой — к моменту выполнения лейбл уже на месте. Благодаря этому
           # у setup-PR проходит первый же запуск, а поздно навешенный лейбл
           # лечится кнопкой Re-run вместо нового события.
-          sleep 15
+          sleep 3
 
           LABELS=$(gh api "repos/${{ github.repository }}/issues/${{ github.event.pull_request.number }}/labels" --jq '[.[].name] | tojson')
           echo "PR labels: $LABELS"
