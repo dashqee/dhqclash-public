@@ -21,7 +21,3 @@
 #   URLs
 #
 # Empty lines and comments are allowed.
-
-
-# From issue #11
-chrome.exe
