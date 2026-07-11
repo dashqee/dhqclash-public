@@ -24,3 +24,9 @@
 HeroesOfTheStorm_x64
 HeroesOfTheStorm_x64.exe
 battle.net.exe
+
+# From issue #13
+AnyDesk.exe
+Discord.exe
+Telegram.exe
+slack.exe
