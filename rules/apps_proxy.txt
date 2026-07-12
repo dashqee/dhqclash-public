@@ -30,3 +30,7 @@ AnyDesk.exe
 Discord.exe
 Telegram.exe
 slack.exe
+
+# From issue #17
+claude
+claude.exe
