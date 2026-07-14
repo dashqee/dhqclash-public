@@ -26,7 +26,3 @@
 avito
 ozon
 
-# From issue #19
-+.apple.com
-+.icloud.com
-itunes
