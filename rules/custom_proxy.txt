@@ -108,3 +108,8 @@
 
 # From issue #15
 +.hyper3d.ai
+
+# From issue #21
++.apple.com
++.icloud.com
+itunes
