@@ -116,3 +116,6 @@ itunes
 
 # From issue #23
 +.wallet.tg
+
+# From issue #25
++.telegra.ph
