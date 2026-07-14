@@ -119,3 +119,6 @@ itunes
 
 # From issue #25
 +.telegra.ph
+
+# From issue #29
++.leagueoflegends.com
