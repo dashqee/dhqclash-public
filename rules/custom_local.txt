@@ -26,3 +26,6 @@
 avito
 ozon
 
+
+# From issue #27
++.leagueoflegends.com
