@@ -108,6 +108,7 @@
 
 # From issue #15
 +.hyper3d.ai
++.hyper3d.com
 
 # From issue #21
 +.apple.com
