@@ -126,3 +126,6 @@ itunes
 
 # From issue #31
 +.ridibooks.com
+
+# From issue #33
++.loudwire.com
