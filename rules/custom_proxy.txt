@@ -123,3 +123,6 @@ itunes
 
 # From issue #29
 +.leagueoflegends.com
+
+# From issue #31
++.ridibooks.com
