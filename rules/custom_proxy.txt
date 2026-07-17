@@ -110,10 +110,7 @@
 +.hyper3d.ai
 +.hyper3d.com
 
-# From issue #21
-+.apple.com
-+.icloud.com
-itunes
+
 
 # From issue #23
 +.wallet.tg
