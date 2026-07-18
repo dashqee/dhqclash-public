@@ -129,3 +129,7 @@
 
 # From issue #35
 +.jumpthrow.pro
+
+# From issue #37
++.144.31.155.223.sslip.io
+144.31.155.223/32
