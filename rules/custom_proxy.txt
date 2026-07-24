@@ -138,3 +138,7 @@
 +.apple.com
 +.icloud.com
 itunes
+
+# From issue #42
++.dhqclash.app
++.dhqclash.com
