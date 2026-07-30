@@ -34,3 +34,5 @@ slack.exe
 # From issue #17
 claude
 claude.exe
+
+lu4.bin
