@@ -12,7 +12,9 @@ permissions:
 
 jobs:
   create-routing-pr:
-    if: github.event.label.name == 'approved-routing-request'
+    if: >-
+      github.event.label.name == 'approved-routing-request' &&
+      contains(github.event.issue.body, '### Domains or IP/CIDR')
     runs-on: ubuntu-latest
 
     steps:

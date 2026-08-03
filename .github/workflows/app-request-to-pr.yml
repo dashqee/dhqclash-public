@@ -12,7 +12,9 @@ permissions:
 
 jobs:
   create-app-routing-pr:
-    if: github.event.label.name == 'approved-app-request'
+    if: >-
+      github.event.label.name == 'approved-app-request' &&
+      contains(github.event.issue.body, '### Applications')
     runs-on: ubuntu-latest
 
     steps:
