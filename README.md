@@ -1,6 +1,6 @@
 # dhqclash
 
-[![Custom MRS release](https://img.shields.io/badge/release-custom--mrs-blue)](https://github.com/dashqee/dhqclash-public/releases/tag/custom-mrs)
+[![Custom MRS and Happ geodata release](https://img.shields.io/badge/release-custom--mrs-blue)](https://github.com/dashqee/dhqclash-public/releases/tag/custom-mrs)
 
 Персональные Clash/Mihomo конфиги, выдаваемые через Telegram-бота
 [@dhqclashconfigbot](https://t.me/dhqclashconfigbot), и открытый набор
@@ -106,6 +106,9 @@ regex:^chrom(e|ium)     — по регулярному выражению на 
 - `custom-local-domains.mrs` / `custom-local-ipcidr.mrs` — идёт напрямую;
 - `custom-apps-proxy.list` / `custom-apps-local.list` — правила по процессам
   (classical/text, не `.mrs`; действуют на desktop и Android, не на iOS).
+- `happ-geosite.dat` / `happ-geoip.dat` — компактные Xray geodata для routing-профиля
+  Happ. `dhq-proxy` объединяет `ru-blocked`, re:filter и пользовательские правила;
+  также включены `dhq-direct`, `dhq-block`, российские и private-наборы.
 
 Конфигурации клиентов ссылаются на эти файлы как на rule-providers, так что
 изменения применяются без переустановки подписки.

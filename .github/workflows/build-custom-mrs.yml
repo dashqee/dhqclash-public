@@ -1,4 +1,4 @@
-name: Build custom Mihomo MRS
+name: Build Mihomo MRS and Happ geodata
 
 on:
   push:
@@ -11,6 +11,9 @@ on:
       - "rules/apps_local.txt"
       - "scripts/build_custom_rule_sources.py"
       - "scripts/build_app_rule_sources.py"
+      - "scripts/build_happ_geodata_sources.py"
+      - "scripts/test_build_happ_geodata_sources.py"
+      - "geodata/**"
       - ".github/workflows/build-custom-mrs.yml"
 
   workflow_dispatch:
@@ -26,12 +29,25 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Set up Go for geodata builders
+        uses: actions/setup-go@v5
+        with:
+          go-version: "1.26.x"
+          cache: false
+
       - name: Generate text rulesets
         run: |
           python3 scripts/build_custom_rule_sources.py \
             --proxy-input rules/custom_proxy.txt \
             --local-input rules/custom_local.txt \
             --out-dir build
+
+          python3 scripts/build_happ_geodata_sources.py \
+            --proxy-input rules/custom_proxy.txt \
+            --local-input rules/custom_local.txt \
+            --out-dir build/happ
+
+          python3 -m unittest scripts/test_build_happ_geodata_sources.py
 
       - name: Download mihomo
         run: |
@@ -102,10 +118,27 @@ jobs:
 
           ls -lh generated
 
-      # Публикуем в release ЭТОГО (публичного) репо — оттуда .mrs тянут все клиенты.
+      - name: Build Happ geosite.dat and geoip.dat
+        run: |
+          set -euo pipefail
+
+          git clone --depth 1 \
+            https://github.com/KazZzeL/geomixer.git \
+            build/geomixer
+          cd build/geomixer
+          go build -o "${GITHUB_WORKSPACE}/build/geomixer-bin" ./
+          cd "${GITHUB_WORKSPACE}"
+
+          ./build/geomixer-bin mix geodata/happ-geomixer.yaml -o generated
+          test -s generated/happ-geosite.dat
+          test -s generated/happ-geoip.dat
+
+          ls -lh generated/happ-geosite.dat generated/happ-geoip.dat
+
+      # Публикуем в release ЭТОГО (публичного) репо — оттуда MRS/geodata тянут клиенты.
       # Репо и релиз совпадают со сборкой, поэтому хватает встроенного GITHUB_TOKEN
       # (permissions: contents: write выше). Тег/релиз custom-mrs уже существуют.
-      - name: Publish generated MRS to the release
+      - name: Publish generated routing assets to the release
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
@@ -118,4 +151,6 @@ jobs:
             generated/custom-local-domains.mrs \
             generated/custom-local-ipcidr.mrs \
             generated/custom-apps-proxy.list \
-            generated/custom-apps-local.list
+            generated/custom-apps-local.list \
+            generated/happ-geosite.dat \
+            generated/happ-geoip.dat
