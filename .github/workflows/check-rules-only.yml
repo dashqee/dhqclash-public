@@ -44,7 +44,7 @@ jobs:
 
       - name: Checkout
         if: steps.setup.outputs.is_setup != 'true'
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
@@ -53,11 +53,8 @@ jobs:
         run: |
           set -euo pipefail
 
-          BASE_REF="${{ github.base_ref }}"
-
-          git fetch origin "$BASE_REF" --depth=1
-
-          CHANGED_FILES="$(git diff --name-only "origin/$BASE_REF"...HEAD)"
+          BASE_SHA="${{ github.event.pull_request.base.sha }}"
+          CHANGED_FILES="$(git diff --name-only "$BASE_SHA" HEAD)"
 
           echo "Changed files:"
           echo "$CHANGED_FILES"
