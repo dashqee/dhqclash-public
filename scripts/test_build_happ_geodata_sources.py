@@ -11,6 +11,14 @@ from build_happ_geodata_sources import build, mihomo_domain_to_v2fly
 
 
 class HappGeodataSourcesTest(unittest.TestCase):
+    def test_geomixer_config_excludes_ios_memory_heavy_ads(self):
+        config = Path('geodata/happ-geomixer.yaml').read_text(encoding='utf-8')
+
+        self.assertNotIn('category-ads-all', config)
+        self.assertNotIn('name: dhq-block', config)
+        self.assertIn('include: [ru-blocked, refilter]', config)
+        self.assertIn('include: [category-ru]', config)
+
     def test_domain_translation(self):
         self.assertEqual('domain:example.com', mihomo_domain_to_v2fly('+.example.com'))
         self.assertEqual(
