@@ -10,8 +10,13 @@ The output keeps only the tags used by the DHQ Happ profile:
 
 - `dhq-proxy`: `ru-blocked` + re:filter + custom PROXY rules;
 - `dhq-direct`: custom DIRECT rules;
-- `dhq-block`: `category-ads-all`;
 - `category-ru`, `ru`, and `private` for direct routing.
+
+`category-ads-all` intentionally stays out of the Happ build. It made
+`happ-geosite.dat` exceed 5 MiB and caused the iOS Xray process to hit its memory
+limit. Ad blocking must use a small inline/custom list or a filtering DNS instead.
+CI keeps the geosite asset below 4 MiB so upstream growth cannot silently break
+iOS again.
 
 The runetfreedom source is distributed under GPL-3.0. The generated geodata files
 are distributed under the same terms; this directory and the public workflow are

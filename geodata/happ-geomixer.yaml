@@ -23,11 +23,6 @@ geosite:
           steps:
             - action: add
               input: custom-direct
-        - name: dhq-block
-          steps:
-            - action: add
-              input: runetfreedom
-              include: [category-ads-all]
         - name: category-ru
           steps:
             - action: add

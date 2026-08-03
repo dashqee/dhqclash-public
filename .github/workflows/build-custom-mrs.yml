@@ -133,6 +133,13 @@ jobs:
           test -s generated/happ-geosite.dat
           test -s generated/happ-geoip.dat
 
+          GEOSITE_SIZE="$(stat -c '%s' generated/happ-geosite.dat)"
+          GEOSITE_MAX_SIZE=$((4 * 1024 * 1024))
+          if [ "$GEOSITE_SIZE" -gt "$GEOSITE_MAX_SIZE" ]; then
+            echo "happ-geosite.dat is ${GEOSITE_SIZE} bytes; iOS safety ceiling is ${GEOSITE_MAX_SIZE}"
+            exit 1
+          fi
+
           ls -lh generated/happ-geosite.dat generated/happ-geoip.dat
 
       # Публикуем в release ЭТОГО (публичного) репо — оттуда MRS/geodata тянут клиенты.
