@@ -1,0 +1,76 @@
+geosite:
+  inputs:
+    - name: runetfreedom
+      kind: geofile
+      url: https://raw.githubusercontent.com/runetfreedom/russia-v2ray-rules-dat/release/geosite.dat
+    - name: custom-proxy
+      kind: plain
+      path: ./build/happ/dhq-proxy
+    - name: custom-direct
+      kind: plain
+      path: ./build/happ/dhq-direct
+  outputs:
+    - name: happ-geosite.dat
+      categories:
+        - name: dhq-proxy
+          steps:
+            - action: add
+              input: runetfreedom
+              include: [ru-blocked, refilter]
+            - action: add
+              input: custom-proxy
+        - name: dhq-direct
+          steps:
+            - action: add
+              input: custom-direct
+        - name: dhq-block
+          steps:
+            - action: add
+              input: runetfreedom
+              include: [category-ads-all]
+        - name: category-ru
+          steps:
+            - action: add
+              input: runetfreedom
+              include: [category-ru]
+        - name: private
+          steps:
+            - action: add
+              input: runetfreedom
+              include: [private]
+
+geoip:
+  inputs:
+    - name: runetfreedom
+      kind: geofile
+      url: https://raw.githubusercontent.com/runetfreedom/russia-v2ray-rules-dat/release/geoip.dat
+    - name: custom-proxy
+      kind: plain
+      path: ./build/happ/dhq-proxy-ip.txt
+    - name: custom-direct
+      kind: plain
+      path: ./build/happ/dhq-direct-ip.txt
+  outputs:
+    - name: happ-geoip.dat
+      categories:
+        - name: dhq-proxy
+          steps:
+            - action: add
+              input: runetfreedom
+              include: [ru-blocked, re-filter]
+            - action: add
+              input: custom-proxy
+        - name: dhq-direct
+          steps:
+            - action: add
+              input: custom-direct
+        - name: ru
+          steps:
+            - action: add
+              input: runetfreedom
+              include: [ru]
+        - name: private
+          steps:
+            - action: add
+              input: runetfreedom
+              include: [private]

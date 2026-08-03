@@ -2,6 +2,12 @@
 
 Заметные изменения пользовательской части dhqclash.
 
+## 2026-08-03
+- Release `custom-mrs` дополнен `happ-geosite.dat` и `happ-geoip.dat` для
+  автоматического routing-профиля Happ.
+- Пользовательские PROXY/DIRECT домены и CIDR теперь одновременно компилируются
+  в форматы Mihomo MRS и Xray geodata.
+
 ## 2026-07-08
 - Добавлена маршрутизация приложений по процессам: отдельная Issue-форма
   «App routing rule» и наборы `custom-apps-proxy.list` / `custom-apps-local.list`
