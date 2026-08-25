@@ -27,3 +27,6 @@ avito
 ozon
 
 
+
+# From issue #52
++.metrika.yandex.ru
