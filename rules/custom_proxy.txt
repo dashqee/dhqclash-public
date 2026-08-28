@@ -23,15 +23,11 @@
 # From issue #10
 +.7tv.app
 +.7tv.net
-+.anistar.org
-+.ficbook.net
 +.genyoutube.online
 +.hdrezka.tv
 +.jut.su
-+.myanimelist.net
 +.rezka.ag
 +.songsterr.com
-+.v1.yaoilib.net
 
 
 # From issue #26
@@ -44,7 +40,6 @@
 +.archiveofourown.org
 +.arturia.net
 +.base64.guru
-+.bitchesgirls.tv
 +.blmodding.wikidot.com
 +.chatgpt.com
 +.clash.gg
@@ -68,11 +63,8 @@
 +.mw2.global
 +.mw5.fun
 +.oculus.com
-+.onlyfans.com
 +.pay.openai.com
 +.poe2db.tw
-+.pornolab.net
-+.porofessor.gg
 +.pricempire.com
 +.proactivebackend-pa.googleapis.com
 +.pros.gg
@@ -83,7 +75,6 @@
 +.skinsearch.com
 +.swagger.io
 +.utweb.rainberrytv.com
-+.viralxxxporn.com
 +.whatismyip.com
 +.whatismyipaddress.com
 
