@@ -146,3 +146,6 @@ itunes
 # From issue #45
 185.29.253.102/32
 54.37.221.190/32
+
+# From issue #54
++.tapochek.net
