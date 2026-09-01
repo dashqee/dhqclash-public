@@ -2,3 +2,10 @@ __pycache__/
 *.pyc
 build/
 generated/
+/.claude/worktrees/work/
+/.idea/dhqclash-public.iml
+/.idea/go.imports.xml
+/.idea/misc.xml
+/.idea/modules.xml
+/.idea/vcs.xml
+/.idea/workspace.xml
