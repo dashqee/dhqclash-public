@@ -139,3 +139,6 @@ itunes
 
 # From issue #58
 144.31.155.223/32
+
+# From issue #60
++.monitoring.144.31.155.223.sslip.io
