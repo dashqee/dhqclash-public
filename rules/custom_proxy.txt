@@ -142,3 +142,6 @@ itunes
 
 # From issue #62
 +.iditena.org
+
+# From issue #64
++.tmdb.org
