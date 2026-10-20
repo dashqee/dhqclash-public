@@ -145,3 +145,6 @@ itunes
 
 # From issue #64
 +.tmdb.org
+
+# From issue #66
++.questlog.gg
