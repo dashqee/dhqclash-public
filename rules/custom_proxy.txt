@@ -148,3 +148,6 @@ itunes
 
 # From issue #66
 +.questlog.gg
+
+# From issue #68
++.mythicsim.com
