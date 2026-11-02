@@ -151,3 +151,6 @@ itunes
 
 # From issue #68
 +.mythicsim.com
+
+# From issue #70
++.pathofexile.com
