@@ -28,4 +28,4 @@ MistfallHunter-Win64-Shipping.exe
 steam.exe
 steamwebhelper.exe
 aion2.exe
-LeagueClient.exe
+

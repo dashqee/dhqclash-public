@@ -34,3 +34,4 @@ slack.exe
 # From issue #17
 claude
 claude.exe
+LeagueClient.exe
