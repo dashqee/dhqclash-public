@@ -6,9 +6,10 @@
 #     (/proxies), число соединений и счётчики трафика, CPU/память роутера и
 #     процесса mihomo;
 #   - каждую минуту: TCP+TLS до каждого релея (curl, мимо прокси) и URL-тест
-#     каждой цепочки с длинным таймаутом. Тест идёт на gstatic, а Fallback
-#     проверяет cp.cloudflare.com: mihomo хранит «жив/мёртв» отдельно на каждый
-#     URL, поэтому выбор Fallback тест не сдвигает.
+#     всех цепочек группы Fallback одним запросом (/group/Fallback/delay) с
+#     длинным таймаутом. Тест идёт на gstatic, а Fallback проверяет
+#     cp.cloudflare.com: mihomo хранит «жив/мёртв» отдельно на каждый URL,
+#     поэтому выбор Fallback тест не сдвигает.
 #
 # Нужны только sh и curl. Сырые данные складываются в архив, разбор делает
 # tools/clients/analyze_router_measure.py на нашей стороне. В архив не попадают
@@ -101,18 +102,6 @@ awk '
   }
 ' "$CONFIG" | sort -u >"$OUT/relays.txt"
 
-urlencode() { # каждый байт как %xx: в именах прокси эмодзи, пробелы и "|"
-  printf '%s' "$1" | od -An -tx1 | tr -d '\n' | tr -s ' ' | sed 's/ $//; s/^\([^ ]\)/ \1/; s/ /%/g'
-}
-
-# Имена цепочек каскада: члены группы Fallback со стрелкой в имени.
-chains() {
-  api /proxies/Fallback 2>/dev/null \
-    | sed -n 's/.*"all":\[\([^]]*\)\].*/\1/p' \
-    | sed 's/^"//; s/"$//; s/","/\n/g' \
-    | grep '→'
-}
-
 sample_sys() { # <ts>
   cpu="$(sed -n '1s/^cpu[[:space:]]*//p' /proc/stat 2>/dev/null)"
   pid="$(pidof mihomo 2>/dev/null | awk '{print $1}')"
@@ -139,14 +128,13 @@ sample_relays() { # <ts>
   done <"$OUT/relays.txt"
 }
 
+# Все цепочки группы одним запросом: имя группы ASCII и не требует
+# URL-кодирования. Имена прокси с эмодзи кодировать в busybox нечем надёжно
+# (первая версия теряла на этом весь тест). Ответ — JSON {"имя": задержка};
+# цепочки, не ответившие за таймаут, в нём отсутствуют.
 sample_active() { # <ts>
-  chains >"$OUT/.chains"
-  while IFS= read -r chain; do
-    [ -n "$chain" ] || continue
-    res="$(api "/proxies/$(urlencode "$chain")/delay?url=$TEST_URL&timeout=$TEST_TIMEOUT_MS" 20 2>/dev/null)"
-    printf '%s\t%s\t%s\n' "$(date +%s)" "$chain" "${res:-fail}" >>"$OUT/active.tsv"
-  done <"$OUT/.chains"
-  rm -f "$OUT/.chains"
+  res="$(api "/group/Fallback/delay?url=$TEST_URL&timeout=$TEST_TIMEOUT_MS" $((TEST_TIMEOUT_MS / 1000 + 10)) 2>/dev/null)"
+  printf '%s\t%s\n' "$(date +%s)" "${res:-fail}" >>"$OUT/active.tsv"
 }
 
 echo "Замер идёт $((DURATION / 60)) мин. Роутером можно пользоваться как обычно."
