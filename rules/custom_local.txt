@@ -32,8 +32,6 @@ ozon
 +.metrika.yandex.ru
 
 # From issue #72
-# Cloudflare ranges and whole Hetzner /16s from this request were removed:
-# an IP rule here outranks the Discord and RU-blocked rules for every client.
 +.battlestategames.com
 +.escapefromtarkov.com
 +.escapefromtarkov.ru
