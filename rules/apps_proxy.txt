@@ -35,3 +35,4 @@ slack.exe
 claude
 claude.exe
 aion2.exe
+AION2.exe
