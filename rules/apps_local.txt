@@ -29,3 +29,4 @@ steam.exe
 steamwebhelper.exe
 LeagueClient.exe
 riotclientservices.exe
+RiotClientServices.exe
