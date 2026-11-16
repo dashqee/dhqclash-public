@@ -33,3 +33,4 @@ riotclientservices.exe
 RiotClientServices.exe
 LeagueClientUx.exe
 LeagueClientUxRender.exe
+Riot Client.exe
