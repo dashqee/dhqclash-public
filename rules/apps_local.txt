@@ -30,3 +30,5 @@ steamwebhelper.exe
 LeagueClient.exe
 riotclientservices.exe
 RiotClientServices.exe
+LeagueClientUx.exe
+LeagueClientUxRender.exe
