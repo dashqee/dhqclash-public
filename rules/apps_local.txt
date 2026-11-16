@@ -28,6 +28,7 @@ MistfallHunter-Win64-Shipping.exe
 steam.exe
 steamwebhelper.exe
 LeagueClient.exe
+League Client.exe
 riotclientservices.exe
 RiotClientServices.exe
 LeagueClientUx.exe
